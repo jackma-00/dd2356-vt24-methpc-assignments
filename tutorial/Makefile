@@ -1,9 +1,9 @@
 CC = cc
 CFLAGS = -Wall -Wextra -g
 
-SRCS = helloworld.c
+SRCS = hello.c
 OBJS = $(SRCS:.c=.o)
-TARGET = myprogram.out
+TARGET = hello.out
 
 .PHONY: all clean
 
