@@ -5,7 +5,7 @@
 #SBATCH -J myjob
 # Only 1 hour wall-clock time will be given to this job
 #SBATCH -t 1:00:00
-#SBATCH -A edu23.DD2356
+#SBATCH -A edu24.DD2356
 # Number of nodes
 #SBATCH -p shared
 #SBATCH --ntasks-per-node=1
