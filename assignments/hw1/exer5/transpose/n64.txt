@@ -1,0 +1,15 @@
+srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./transpose.out
+Transpose 64 x 64
+BaseTime = 1.69e-06 s, Base Rate = 1.94e+04 MB/s
+
+ Performance counter stats for './transpose.out':
+
+           7277435      instructions:u            #    1.32  insn per cycle
+           5504204      cycles:u
+            203325      L1-dcache-load-misses:u   #    5.85% of all L1-dcache hits
+           3473919      L1-dcache-loads:u
+
+       0.003926430 seconds time elapsed
+
+       0.003597000 seconds user
+       0.000000000 seconds sys
