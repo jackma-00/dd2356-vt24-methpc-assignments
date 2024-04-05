@@ -4,7 +4,7 @@
 #include <sys/time.h>
  
 #define TRIALS 10 
-#define MSIZE 1000
+#define MSIZE 64
 
 double matrix_a[MSIZE][MSIZE];
 double matrix_b[MSIZE][MSIZE];
