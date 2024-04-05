@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/time.h>
 
-#define N 128
+#define N 2048
 
 double a[N][N];
 double b[N][N];
