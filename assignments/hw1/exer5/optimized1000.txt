@@ -1,0 +1,17 @@
+srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply.out
+1. Initializing Matrices
+2. Matrix Multiply
+3. Sum = 249.968991
+4. time = 0.128931
+
+ Performance counter stats for './matrix_multiply.out':
+
+        9705281504      instructions:u            #    2.00  insn per cycle
+        4857343140      cycles:u
+        1416119729      L1-dcache-load-misses:u   #   16.51% of all L1-dcache hits
+        8577298338      L1-dcache-loads:u
+
+       1.443190176 seconds time elapsed
+
+       1.431624000 seconds user
+       0.007997000 seconds sys
