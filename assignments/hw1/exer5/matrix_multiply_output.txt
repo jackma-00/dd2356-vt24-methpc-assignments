@@ -1,0 +1,4 @@
+1. Initializing Matrices 
+2. Matrix Multiply 
+3. Sum = 249.968991 
+4. time = 1.431585
