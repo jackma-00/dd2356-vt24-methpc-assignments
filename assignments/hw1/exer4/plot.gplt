@@ -1,0 +1,9 @@
+set terminal png size 8192,4096 enhanced font "Helvetica,72"
+set output 'memory_mountain.png'
+set palette rgbformulae 33,13,10
+set pm3d
+set zlabel 'Throughput (MB/s)' rotate parallel offset -1,0,0
+set xlabel 'Stride (x8 bytes)' rotate parallel
+set ylabel 'Size (bytes)' rotate parallel
+splot '<tail -n +3 results.txt' matrix rowheaders columnheaders with lines notitle
+exit
