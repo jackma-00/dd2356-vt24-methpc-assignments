@@ -13,7 +13,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(TARGET)
-	./$(TARGET) 4
+	./$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
