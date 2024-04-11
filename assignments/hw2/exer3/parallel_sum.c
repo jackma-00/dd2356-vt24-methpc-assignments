@@ -168,8 +168,8 @@ int main() {
             num_threads, parallel_time_avg, parallel_time_stddev);
     }
 
-    const int SIZE_2 = 4;
-    int num_treads_array_2[] = { 1, 32, 64, 128 };
+    const int SIZE_2 = 11;
+    int num_treads_array_2[] = { 1, 2, 4, 8, 16, 20, 24, 28, 32, 64, 128 };
 
     // Performance Measurement for omp_local_sum
     printf("\nOpenMP Parallel Version with Local Sum (omp_local_sum):\n");
