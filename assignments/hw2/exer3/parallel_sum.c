@@ -45,6 +45,7 @@ void generate_random(double *input, size_t size) {
 }
 
 #define MAX_THREADS 128
+
 //question 4
 double omp_local_sum(double *x, size_t size, int num_threads) {
     double local_sum[MAX_THREADS] = {0.0};
@@ -167,28 +168,47 @@ int main() {
             num_threads, parallel_time_avg, parallel_time_stddev);
     }
 
+    const int SIZE_2 = 4;
+    int num_treads_array_2[] = { 1, 32, 64, 128 };
+
     // Performance Measurement for omp_local_sum
     printf("\nOpenMP Parallel Version with Local Sum (omp_local_sum):\n");
-    for (int num_threads = 1; num_threads <= 128; num_threads *= 2) {
+    for (int i = 0; i < SIZE_2; i++) {
+        int num_threads = num_treads_array_2[i];
+        double parallel_time_ls = 0.0;
+        double parallel_time_ls_stddev = 0.0;
         for (int i = 0; i < 10; i++) {
             double start = omp_get_wtime();
             double result = omp_local_sum(data, size, num_threads);
             double end = omp_get_wtime();
             double elapsed = end - start;
-            printf("Threads: %d, Execution time: %.6f seconds\n", num_threads, elapsed);
+            parallel_time_ls += elapsed;
+            parallel_time_ls_stddev += elapsed * elapsed;
         }
+        parallel_time_ls /= 10.0;
+        parallel_time_ls_stddev = sqrt((parallel_time_ls_stddev / 10.0) - (parallel_time_ls * parallel_time_ls));
+        printf("Threads: %d, Execution time (average): %.6f seconds, Execution time (standard deviation): %.6f seconds\n",
+            num_threads, parallel_time_ls, parallel_time_ls_stddev);
     }
 
     // Performance Measurement for opt_local_sum
     printf("\nOptimized OpenMP Parallel Version with Local Sum (opt_local_sum):\n");
-    for (int num_threads = 1; num_threads <= 128; num_threads *= 2) {
+    for (int i = 0; i < SIZE_2; i++) {
+        int num_threads = num_treads_array_2[i];
+        double parallel_time_ls_optimized = 0.0;
+        double parallel_time_ls_optimized_stddev = 0.0;
         for (int i = 0; i < 10; i++) {
             double start = omp_get_wtime();
             double result = opt_local_sum(data, size, num_threads);
             double end = omp_get_wtime();
             double elapsed = end - start;
-            printf("Threads: %d, Execution time: %.6f seconds\n", num_threads, elapsed);
+            parallel_time_ls_optimized += elapsed;
+            parallel_time_ls_optimized_stddev += elapsed * elapsed;
         }
+        parallel_time_ls_optimized /= 10.0;
+        parallel_time_ls_optimized_stddev = sqrt((parallel_time_ls_optimized_stddev / 10.0) - (parallel_time_ls_optimized * parallel_time_ls_optimized));
+        printf("Threads: %d, Execution time (average): %.6f seconds, Execution time (standard deviation): %.6f seconds\n",
+            num_threads, parallel_time_ls_optimized, parallel_time_ls_optimized_stddev);
     }
 
     free(data);
