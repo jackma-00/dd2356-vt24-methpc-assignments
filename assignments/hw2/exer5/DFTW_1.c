@@ -59,10 +59,10 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < 4; i++) {
     omp_set_num_threads(number_of_threads[i]); // set number of threads
     int idft = 1;
-    DFT(idft, xr, xi, Xr_o, Xi_o, N);
+    DFTDFT_parallel(idft, xr, xi, Xr_o, Xi_o, N);
     // IDFT
     idft = -1;
-    DFT(idft, Xr_o, Xi_o, xr_check, xi_check, N);
+    DFTDFT_parallel(idft, Xr_o, Xi_o, xr_check, xi_check, N);
   }
 
   // stop timer
@@ -113,10 +113,8 @@ int DFT(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o, int N) {
 
 // DFT/IDFT parallel routine
 // idft: 1 direct DFT, -1 inverse IDFT (Inverse DFT)
-int DFT_parallel(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o,
-                 int N) {
+int DFT(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o, int N) {
   printf("Number of threads: %d\n", omp_get_num_threads());
-  #pragma omp for
   for (int k = 0; k < N; k++) {
     for (int n = 0; n < N; n++) {
       // Real part of X[k]
@@ -127,9 +125,9 @@ int DFT_parallel(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o,
           -idft * xr[n] * sin(n * k * PI2 / N) + xi[n] * cos(n * k * PI2 / N);
     }
   }
+
   // normalize if you are doing IDFT
   if (idft == -1) {
-    #pragma omp for
     for (int n = 0; n < N; n++) {
       Xr_o[n] /= N;
       Xi_o[n] /= N;
