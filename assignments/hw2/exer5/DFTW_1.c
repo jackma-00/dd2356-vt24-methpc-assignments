@@ -62,10 +62,10 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < 4; i++) {
     omp_set_num_threads(number_of_threads[i]); // set number of threads
     int idft = 1;
-    DFTDFT_parallel(idft, xr, xi, Xr_o, Xi_o, N);
+    DFT_parallel(idft, xr, xi, Xr_o, Xi_o, N);
     // IDFT
     idft = -1;
-    DFTDFT_parallel(idft, Xr_o, Xi_o, xr_check, xi_check, N);
+    DFT_parallel(idft, Xr_o, Xi_o, xr_check, xi_check, N);
   }
 
   // stop timer
