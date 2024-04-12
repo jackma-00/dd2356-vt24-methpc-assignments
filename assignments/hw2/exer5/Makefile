@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS = -Wall -O2 -fopenmp -DDEBUG
+CFLAGS = -Wall -O2 -fopenmp
 TARGET = DFTW_1.out
 SRCS = DFTW_1.c
 OBJS = $(SRCS:.c=.o)
