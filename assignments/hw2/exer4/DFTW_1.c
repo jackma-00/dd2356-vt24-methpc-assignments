@@ -87,14 +87,17 @@ int main(int argc, char *argv[]) {
 int DFT(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o, int N) {
   #pragma omp parallel for
   for (int k = 0; k < N; k++) {
+    double sum_real = 0.0;
+    double sum_imag = 0.0;
     for (int n = 0; n < N; n++) {
-      // Real part of X[k]
-      Xr_o[k] +=
-          xr[n] * cos(n * k * PI2 / N) + idft * xi[n] * sin(n * k * PI2 / N);
-      // Imaginary part of X[k]
-      Xi_o[k] +=
-          -idft * xr[n] * sin(n * k * PI2 / N) + xi[n] * cos(n * k * PI2 / N);
+      double angle = (2 * PI2 * k * n) / N;
+      double cos_val = cos(angle);
+      double sin_val = sin(angle);
+      sum_real += xr[n] * cos_val + idft * xi[n] * sin_val;
+      sum_imag += -idft * xr[n] * sin_val + xi[n] * cos_val;
     }
+    Xr_o[k] = sum_real;
+    Xi_o[k] = sum_imag;
   }
 
   // normalize if you are doing IDFT
