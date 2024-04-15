@@ -32,7 +32,7 @@ int printResults(double *xr, double *xi, int N);
 
 int main(int argc, char *argv[]) {
   // size of input array
-  int N = 8000; // 8,000 is a good number for testing
+  int N = 10000; // 8,000 is a good number for testing
   printf("DFTW calculation with N = %d \n", N);
 
   // Allocate array for input vector
