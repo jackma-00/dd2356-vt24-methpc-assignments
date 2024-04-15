@@ -85,30 +85,32 @@ int main(int argc, char *argv[]) {
 // DFT/IDFT routine
 // idft: 1 direct DFT, -1 inverse IDFT (Inverse DFT)
 int DFT(int idft, double *xr, double *xi, double *Xr_o, double *Xi_o, int N) {
-  #pragma omp parallel for
-  for (int k = 0; k < N; k++) {
-    double sum_real = 0.0;
-    double sum_imag = 0.0;
-    for (int n = 0; n < N; n++) {
-      double angle = (2 * PI2 * k * n) / N;
-      double cos_val = cos(angle);
-      double sin_val = sin(angle);
-      sum_real += xr[n] * cos_val + idft * xi[n] * sin_val;
-      sum_imag += -idft * xr[n] * sin_val + xi[n] * cos_val;
-    }
-    Xr_o[k] = sum_real;
-    Xi_o[k] = sum_imag;
-  }
-
-  // normalize if you are doing IDFT
-  if (idft == -1) {
     #pragma omp parallel for
-    for (int n = 0; n < N; n++) {
-      Xr_o[n] /= N;
-      Xi_o[n] /= N;
+    for (int k = 0; k < N; k++) {
+        double Xr_partial = 0.0;
+        double Xi_partial = 0.0;
+        for (int n = 0; n < N; n++) {
+            double angle = n * k * PI2 / N;
+            double cos_angle = cos(angle);
+            double sin_angle = sin(angle);
+            // Real part of X[k]
+            Xr_partial += xr[n] * cos_angle + idft * xi[n] * sin_angle;
+            // Imaginary part of X[k]
+            Xi_partial += -idft * xr[n] * sin_angle + xi[n] * cos_angle;
+        }
+        Xr_o[k] = Xr_partial;
+        Xi_o[k] = Xi_partial;
     }
-  }
-  return 1;
+
+    // normalize if you are doing IDFT
+    if (idft == -1) {
+        #pragma omp parallel for
+        for (int n = 0; n < N; n++) {
+            Xr_o[n] /= N;
+            Xi_o[n] /= N;
+        }
+    }
+    return 1;
 }
 
 // set the initial signal
