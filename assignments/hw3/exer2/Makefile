@@ -1,7 +1,7 @@
 CC = mpicc
-NOFProcs = 4
-TARGET = hello_mpi
-SRCS = hello_mpi.c
+NOFProcs = 2
+TARGET = ping_pong
+SRCS = ping_pong.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
