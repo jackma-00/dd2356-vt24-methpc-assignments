@@ -21,3 +21,6 @@ bin/
 
 # Dependency directories
 vendor/
+
+# macOS files
+.DS_Store
