@@ -1,5 +1,4 @@
-CC = mpicc
-NOFProcs = 2
+CC = cc
 TARGET = pi_seq
 SRCS = pi_seq.c
 OBJS = $(SRCS:.c=.o)
@@ -11,9 +10,6 @@ $(TARGET): $(OBJS)
 
 %.o: %.c
 	$(CC) -c $< -o $@
-
-run: $(TARGET)
-	mpiexec -n $(NOFProcs) ./$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
