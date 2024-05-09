@@ -4,14 +4,20 @@
 
 #define MATRIX_SIZE 6
 
+// Function to allocate memory for a matrix
 double** allocate_matrix(int rows, int cols) {
     double** matrix = (double**)malloc(rows * sizeof(double*));
     for (int i = 0; i < rows; i++) {
         matrix[i] = (double*)malloc(cols * sizeof(double));
+        if (matrix[i] == NULL) {
+            printf("Memory allocation failed\n");
+            exit(1);
+        }
     }
     return matrix;
 }
 
+// Function to free memory allocated to a matrix
 void free_matrix(double** matrix, int rows) {
     for (int i = 0; i < rows; i++) {
         free(matrix[i]);
@@ -19,6 +25,7 @@ void free_matrix(double** matrix, int rows) {
     free(matrix);
 }
 
+// Function to print a matrix
 void print_matrix(double** matrix, int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -28,6 +35,7 @@ void print_matrix(double** matrix, int rows, int cols) {
     }
 }
 
+// Function to initialize a matrix with random values
 void initialize_matrix(double** matrix, int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -36,6 +44,7 @@ void initialize_matrix(double** matrix, int rows, int cols) {
     }
 }
 
+// Function to perform local matrix-matrix multiplication
 void matrix_multiply(double** A, double** B, double** C, int block_size) {
     for (int i = 0; i < block_size; i++) {
         for (int j = 0; j < block_size; j++) {
