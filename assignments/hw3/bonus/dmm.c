@@ -4,7 +4,6 @@
 
 #define MATRIX_SIZE 6
 
-// Function to allocate memory for a matrix
 double** allocate_matrix(int rows, int cols) {
     double** matrix = (double**)malloc(rows * sizeof(double*));
     for (int i = 0; i < rows; i++) {
@@ -13,7 +12,6 @@ double** allocate_matrix(int rows, int cols) {
     return matrix;
 }
 
-// Function to free memory allocated to a matrix
 void free_matrix(double** matrix, int rows) {
     for (int i = 0; i < rows; i++) {
         free(matrix[i]);
@@ -21,7 +19,6 @@ void free_matrix(double** matrix, int rows) {
     free(matrix);
 }
 
-// Function to print a matrix
 void print_matrix(double** matrix, int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -31,7 +28,6 @@ void print_matrix(double** matrix, int rows, int cols) {
     }
 }
 
-// Function to initialize a matrix with random values
 void initialize_matrix(double** matrix, int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -40,7 +36,6 @@ void initialize_matrix(double** matrix, int rows, int cols) {
     }
 }
 
-// Function to perform local matrix-matrix multiplication
 void matrix_multiply(double** A, double** B, double** C, int block_size) {
     for (int i = 0; i < block_size; i++) {
         for (int j = 0; j < block_size; j++) {
@@ -54,16 +49,19 @@ void matrix_multiply(double** A, double** B, double** C, int block_size) {
 
 int main(int argc, char** argv) {
     int rank, comm_size;
-    int block_size = MATRIX_SIZE / comm_size;
+    int block_size;
     double** A;
     double** B;
     double** C;
     double** local_A;
     double** local_B;
     double** local_C;
+
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+
+    block_size = MATRIX_SIZE / comm_size;
 
     if (MATRIX_SIZE % comm_size != 0) {
         if (rank == 0) {
@@ -76,8 +74,8 @@ int main(int argc, char** argv) {
     A = allocate_matrix(MATRIX_SIZE, MATRIX_SIZE);
     B = allocate_matrix(MATRIX_SIZE, MATRIX_SIZE);
     C = allocate_matrix(MATRIX_SIZE, MATRIX_SIZE);
-    local_A = allocate_matrix(block_size, block_size);
-    local_B = allocate_matrix(block_size, block_size);
+    local_A = allocate_matrix(block_size, MATRIX_SIZE);
+    local_B = allocate_matrix(MATRIX_SIZE, block_size);
     local_C = allocate_matrix(block_size, block_size);
 
     if (rank == 0) {
@@ -111,7 +109,7 @@ int main(int argc, char** argv) {
     free_matrix(B, MATRIX_SIZE);
     free_matrix(C, MATRIX_SIZE);
     free_matrix(local_A, block_size);
-    free_matrix(local_B, block_size);
+    free_matrix(local_B, MATRIX_SIZE);
     free_matrix(local_C, block_size);
 
     MPI_Finalize();
