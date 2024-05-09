@@ -9,6 +9,8 @@
 
 #define SEED 921
 
+int Toss(int flip);
+
 int main(int argc, char *argv[])
 {
     int flip = 1 << 24; // Number of trials = 2^24
