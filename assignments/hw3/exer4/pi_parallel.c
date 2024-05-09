@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
     printf("The result is %f\n", pi);
     printf("Execution Time: %f\n", elapsed_time);
+    printf("Number of processes: %d\n", num_ranks);
 
     return 0;
 }
