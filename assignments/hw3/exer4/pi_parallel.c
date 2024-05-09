@@ -39,13 +39,15 @@ int main(int argc, char *argv[])
 
     // Estimate Pi
     if (rank == 0)
+    {
         pi = ((double)total_count / (double)(flip * num_ranks)) * 4.0;
+        
+        printf("The result is %f\n", pi);
+        printf("Execution Time: %f\n", elapsed_time);
+        printf("Number of processes: %d\n", num_ranks);
+    }
 
     MPI_Finalize();
-
-    printf("The result is %f\n", pi);
-    printf("Execution Time: %f\n", elapsed_time);
-    printf("Number of processes: %d\n", num_ranks);
 
     return 0;
 }
