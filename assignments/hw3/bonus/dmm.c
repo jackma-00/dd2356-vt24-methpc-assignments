@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     C = allocate_matrix(MATRIX_SIZE, MATRIX_SIZE);
     local_A = allocate_matrix(block_size, MATRIX_SIZE);
     local_B = allocate_matrix(MATRIX_SIZE, block_size);
-    local_C = allocate_matrix(block_size, block_size);
+    local_C = allocate_matrix(block_size, MATRIX_SIZE);
 
     if (rank == 0) {
         // Initialize matrices A and B
@@ -85,14 +85,14 @@ int main(int argc, char** argv) {
     }
 
     // Scatter matrices A and B to all processes
-    MPI_Scatter(A[0], MATRIX_SIZE * block_size, MPI_DOUBLE, local_A[0], MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Scatter(B[0], MATRIX_SIZE * block_size, MPI_DOUBLE, local_B[0], MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Scatter(&(A[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, &(local_A[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Scatter(&(B[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, &(local_B[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Perform local matrix multiplication
     matrix_multiply(local_A, local_B, local_C, block_size);
 
     // Gather local results from all processes
-    MPI_Gather(local_C[0], MATRIX_SIZE * block_size, MPI_DOUBLE, C[0], MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&(local_C[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, &(C[0][0]), MATRIX_SIZE * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Print the result in process 0
     if (rank == 0) {
