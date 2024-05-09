@@ -1,6 +1,6 @@
 CC = cc
-TARGET = pi_seq
-SRCS = pi_seq.c
+TARGET = pi_parallel
+SRCS = pi_parallel.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
