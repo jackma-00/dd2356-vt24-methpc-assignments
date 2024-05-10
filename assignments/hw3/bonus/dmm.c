@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         for (j = 0; j < dim; j++)
         {
             // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
-            printf("%d ", localC[i][j]);
+            printf("%f ", localC[i][j]);
         }
         printf("\n");
     }
