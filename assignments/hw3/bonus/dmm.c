@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     double **localA;
     double **localB;
     double **localC;
+    double* C;
     int rank, num_ranks, provided;
     double start_time, stop_time, loc_elapsed_time, elapsed_time;
 
@@ -40,6 +41,10 @@ int main(int argc, char *argv[])
         *(localC + i) = (double *)malloc(dim * sizeof(double));
     }
 
+    if (grid.my_rank == 0) {
+    C = (double **)malloc(N *  sizeof(double));
+}
+
     /* Compute local matrices - Ideally the master should do this & pass it onto all the slaves */
     /* At the same time initialize localC to all zeros */
 
@@ -62,20 +67,24 @@ int main(int argc, char *argv[])
     loc_elapsed_time = stop_time - start_time;
 
     MPI_Reduce(&loc_elapsed_time, &elapsed_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Gather(localC, dim, MPI_DOUBLE, C, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    /* print results */
+    if (rank == 0) {
+
+        /* print results */
     printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
     for (i = 0; i < dim; i++)
     {
         for (j = 0; j < dim; j++)
         {
-            // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
-            printf("%f ", localC[i][j]);
+            printf("%f ", C[i][j]);
         }
         printf("\n");
     }
     printf("Execution Time: %f\n", elapsed_time);
     printf("Number of processes: %d\n", num_ranks);
+
+    }
 
     MPI_Finalize();
     exit(0);
