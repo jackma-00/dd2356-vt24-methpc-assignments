@@ -1,6 +1,6 @@
 CC = cc
 TARGET = myprogram
-SRCS = test_fox.c
+SRCS = test_fox.c fox.c
 OBJS = $(SRCS:.c=.o)
 HDRS = fox.h
 
