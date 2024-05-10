@@ -10,7 +10,12 @@ int main(int argc, char *argv[])
     double **localA;
     double **localB;
     double **localC;
-    MPI_Init(&argc, &argv);
+    int rank, num_ranks, provided;
+    double start_time, stop_time, loc_elapsed_time, elapsed_time;
+
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
     GridInfo grid;
     /*initialize Grid */
@@ -51,19 +56,30 @@ int main(int argc, char *argv[])
         }
     }
 
+    start_time = MPI_Wtime();
     Fox(N, &grid, localA, localB, localC);
+    stop_time = MPI_Wtime();
+    loc_elapsed_time = stop_time - start_time;
 
-    /* print results */
-    printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
-    for (i = 0; i < dim; i++)
+    MPI_Reduce(&loc_elapsed_time, &elapsed_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+    if (rank == 0)
     {
-        for (j = 0; j < dim; j++)
+        /* print results */
+        printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
+        for (i = 0; i < dim; i++)
         {
-            // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
-            printf("%f ", localC[i][j]);
+            for (j = 0; j < dim; j++)
+            {
+                // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
+                printf("%f ", localC[i][j]);
+            }
+            printf("\n");
         }
-        printf("\n");
+        printf("Execution Time: %f\n", elapsed_time);
+        printf("Number of processes: %d\n", num_ranks);
     }
+
     MPI_Finalize();
     exit(0);
 }
