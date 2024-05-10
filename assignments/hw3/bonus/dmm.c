@@ -41,9 +41,13 @@ int main(int argc, char *argv[])
         *(localC + i) = (double *)malloc(dim * sizeof(double));
     }
 
-    if (grid.my_rank == 0)
+    if (rank == 0)
     {
-        C = (double **)malloc(N * N * sizeof(double));
+        C = (double **)malloc(N * sizeof(double *));
+        for (i = 0; i < N; i++)
+        {
+            *(C + i) = (double *)malloc(N * sizeof(double));
+        }
     }
 
     /* Compute local matrices - Ideally the master should do this & pass it onto all the slaves */
