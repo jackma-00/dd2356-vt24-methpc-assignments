@@ -63,22 +63,19 @@ int main(int argc, char *argv[])
 
     MPI_Reduce(&loc_elapsed_time, &elapsed_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-    if (rank == 0)
+    /* print results */
+    printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
+    for (i = 0; i < dim; i++)
     {
-        /* print results */
-        printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
-        for (i = 0; i < dim; i++)
+        for (j = 0; j < dim; j++)
         {
-            for (j = 0; j < dim; j++)
-            {
-                // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
-                printf("%f ", localC[i][j]);
-            }
-            printf("\n");
+            // printf("localC[%d][%d]=%d ", i,j,localC[i][j]);
+            printf("%f ", localC[i][j]);
         }
-        printf("Execution Time: %f\n", elapsed_time);
-        printf("Number of processes: %d\n", num_ranks);
+        printf("\n");
     }
+    printf("Execution Time: %f\n", elapsed_time);
+    printf("Number of processes: %d\n", num_ranks);
 
     MPI_Finalize();
     exit(0);
