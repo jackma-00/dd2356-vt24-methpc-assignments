@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     if (grid.my_rank == 0)
     {
-        C = (double **)malloc(N * N * sizeof(double));
+        C = (double **)malloc(N * N * sizeof(double **));
     }
 
     /* Compute local matrices - Ideally the master should do this & pass it onto all the slaves */
