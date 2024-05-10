@@ -1,31 +1,81 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
+#include "mpi.h"
 #include "fox.h"
 
-void test_Fox() {
-    // Initialize a GridInfo structure
+int main(int argc, char *argv[])
+{
+
+    int i, j, dim;
+    int **localA;
+    int **localB;
+    int **localC;
+    MPI_Init(&argc, &argv);
+
     GridInfo grid;
-    grid.p = 4; // for example
-    // ... initialize other fields of grid as necessary
+    /*initialize Grid */
 
-    // Initialize matrices a, b, and c
-    int a[2][2] = {{1, 2}, {3, 4}};
-    int b[2][2] = {{5, 6}, {7, 8}};
-    int c[2][2] = {{0, 0}, {0, 0}};
+    SetupGrid(&grid);
+    /* Initialize matrix A & B */
+    initialiseAB();
+    /* calculate local matrix dimension */
+    dim = N / grid.q;
+    /* allocate space for the three matrices */
 
-    // Call the Fox function
-    Fox(2, &grid, a, b, c);
+    localA = (int **)malloc(dim * sizeof(int *));
 
-    // Check if the result is as expected
-    assert(c[0][0] == 19);
-    assert(c[0][1] == 22);
-    assert(c[1][0] == 43);
-    assert(c[1][1] == 50);
+    localB = (int **)malloc(dim * sizeof(int *));
+
+    localC = (int **)malloc(dim * sizeof(int *));
+
+    for (i = 0; i < dim; i++)
+    {
+        *(localA + i) = (int *)malloc(dim * sizeof(int));
+        *(localB + i) = (int *)malloc(dim * sizeof(int));
+        *(localC + i) = (int *)malloc(dim * sizeof(int));
+    }
+
+    /* Compute local matrices - Ideally the master should do this & pass it onto all the slaves */
+    /* At the same time initialize localC to all zeros */
+
+    int base_row = grid.my_row * dim;
+    int base_col = grid.my_col * dim;
+
+    for (i = base_row; i < base_row + dim; i++)
+    {
+        for (j = base_col; j < base_col + dim; j++)
+        {
+            localA[i - (base_row)][j - (base_col)] = matrixA[i][j];
+            localB[i - (base_row)][j - (base_col)] = matrixB[i][j];
+            localC[i - (base_row)][j - (base_col)] = 0;
+        }
+    }
+
+    Fox(N, &grid, localA, localB, localC);
+
+    // Expected result
+    int expected[9][9] = {
+        {204, 240, 276, 312, 348, 384, 420, 456, 492},
+        {240, 285, 330, 375, 420, 465, 510, 555, 600},
+        {276, 330, 384, 438, 492, 546, 600, 654, 708},
+        {312, 375, 438, 501, 564, 627, 690, 753, 816},
+        {348, 420, 492, 564, 636, 708, 780, 852, 924},
+        {384, 465, 546, 627, 708, 789, 870, 951, 1032},
+        {420, 510, 600, 690, 780, 870, 960, 1050, 1140},
+        {456, 555, 654, 753, 852, 951, 1050, 1149, 1248},
+        {492, 600, 708, 816, 924, 1032, 1140, 1248, 1356}};
+
+    // Check if localC is as expected
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            assert(localC[i][j] == expected[i][j]);
+        }
+    }
+
+    printf("Test passed\n")
+
+        MPI_Finalize();
+    exit(0);
 }
-
-int main() {
-    test_Fox();
-    printf("Fox function is correct\n")
-    return 0;
-}
-
