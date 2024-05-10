@@ -75,9 +75,9 @@ int main(int argc, char *argv[])
 
         /* print results */
         printf("rank=%d, row=%d col=%d\n", grid.my_rank, grid.my_row, grid.my_col);
-        for (i = 0; i < dim; i++)
+        for (i = 0; i < N; i++)
         {
-            for (j = 0; j < dim; j++)
+            for (j = 0; j < N; j++)
             {
                 printf("%f ", C[i][j]);
             }
