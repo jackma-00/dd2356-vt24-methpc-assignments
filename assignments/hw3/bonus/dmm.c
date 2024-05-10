@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
     loc_elapsed_time = stop_time - start_time;
 
     MPI_Reduce(&loc_elapsed_time, &elapsed_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    
+    // TODO: gather the results from all the processes
     MPI_Gather(localC, dim * dim, MPI_DOUBLE, C, N * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     if (rank == 0)
