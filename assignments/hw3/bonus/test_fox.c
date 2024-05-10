@@ -8,9 +8,9 @@ int main(int argc, char *argv[])
 {
 
     int i, j, dim;
-    int **localA;
-    int **localB;
-    int **localC;
+    double **localA;
+    double **localB;
+    double **localC;
     MPI_Init(&argc, &argv);
 
     GridInfo grid;
@@ -23,17 +23,17 @@ int main(int argc, char *argv[])
     dim = N / grid.q;
     /* allocate space for the three matrices */
 
-    localA = (int **)malloc(dim * sizeof(int *));
+    localA = (double **)malloc(dim * sizeof(double *));
 
-    localB = (int **)malloc(dim * sizeof(int *));
+    localB = (double **)malloc(dim * sizeof(double *));
 
-    localC = (int **)malloc(dim * sizeof(int *));
+    localC = (double **)malloc(dim * sizeof(double *));
 
     for (i = 0; i < dim; i++)
     {
-        *(localA + i) = (int *)malloc(dim * sizeof(int));
-        *(localB + i) = (int *)malloc(dim * sizeof(int));
-        *(localC + i) = (int *)malloc(dim * sizeof(int));
+        *(localA + i) = (double *)malloc(dim * sizeof(double));
+        *(localB + i) = (double *)malloc(dim * sizeof(double));
+        *(localC + i) = (double *)malloc(dim * sizeof(double));
     }
 
     /* Compute local matrices - Ideally the master should do this & pass it onto all the slaves */
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     Fox(N, &grid, localA, localB, localC);
 
     // Expected result
-    int expected[9][9] = {
+    double expected[9][9] = {
         {204, 240, 276, 312, 348, 384, 420, 456, 492},
         {240, 285, 330, 375, 420, 465, 510, 555, 600},
         {276, 330, 384, 438, 492, 546, 600, 654, 708},
