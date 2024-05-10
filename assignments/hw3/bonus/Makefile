@@ -1,6 +1,6 @@
 CC = cc
-TARGET = dmm
-SRCS = dmm.c
+TARGET = fox
+SRCS = fox.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
