@@ -21,10 +21,10 @@ typedef struct
 } GridInfo;
 
 void SetupGrid(GridInfo *grid);
-void matmul(int **a, int **b, int **c, int size);
-void transfer_data_from_buff(int *buff, int **a, int buffsize, int row, int col);
-void transfer_data_to_buff(int *buff, int **a, int buffsize, int row, int col);
-void Fox(int n, GridInfo *grid, int **a, int **b, int **c);
+void matmul(double **a, double **b, double **c, int size);
+void transfer_data_from_buff(double *buff, double **a, int buffsize, int row, int col);
+void transfer_data_to_buff(double *buff, double **a, int buffsize, int row, int col);
+void Fox(int n, GridInfo *grid, double **a, double **b, double **c);
 void initialiseAB();
 
 #endif /* FOX_H */

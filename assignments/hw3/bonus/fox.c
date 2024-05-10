@@ -65,13 +65,13 @@ void SetupGrid(GridInfo *grid)
 
 /* normal matrix multiplication stuff */
 
-void matmul(int **a, int **b, int **c, int size)
+void matmul(double **a, double **b, double **c, double size)
 {
     int i, j, k;
 
-    int **temp = (int **)malloc(size * sizeof(int *));
+    double **temp = (double **)malloc(size * sizeof(double *));
     for (i = 0; i < size; i++)
-        *(temp + i) = (int *)malloc(size * sizeof(int));
+        *(temp + i) = (double *)malloc(size * sizeof(double));
 
     for (i = 0; i < size; i++)
     {
@@ -89,7 +89,7 @@ void matmul(int **a, int **b, int **c, int size)
         for (j = 0; j < size; j++)
             c[i][j] += temp[i][j];
 }
-void transfer_data_from_buff(int *buff, int **a, int buffsize, int row, int col)
+void transfer_data_from_buff(double *buff, double **a, int buffsize, int row, int col)
 {
 
     if (buffsize != row * col)
@@ -108,7 +108,7 @@ void transfer_data_from_buff(int *buff, int **a, int buffsize, int row, int col)
     }
 }
 
-void transfer_data_to_buff(int *buff, int **a, int buffsize, int row, int col)
+void transfer_data_to_buff(double *buff, double **a, int buffsize, int row, int col)
 {
 
     if (buffsize != row * col)
@@ -127,10 +127,10 @@ void transfer_data_to_buff(int *buff, int **a, int buffsize, int row, int col)
     }
 }
 
-void Fox(int n, GridInfo *grid, int **a, int **b, int **c)
+void Fox(int n, GridInfo *grid, double **a, double **b, double **c)
 {
-    int **tempa;
-    int *buff; /* buffer for Bcast & send_recv */
+    double **tempa;
+    double *buff; /* buffer for Bcast & send_recv */
     int stage;
     int root;
     int submat_dim; /* = n/q */
@@ -142,11 +142,11 @@ void Fox(int n, GridInfo *grid, int **a, int **b, int **c)
     submat_dim = n / grid->q;
 
     /* Initialize tempa */
-    tempa = (int **)malloc(submat_dim * sizeof(int *));
+    tempa = (double **)malloc(submat_dim * sizeof(double *));
     for (i = 0; i < submat_dim; i++)
-        *(tempa + i) = (int *)malloc(submat_dim * sizeof(int));
+        *(tempa + i) = (double *)malloc(submat_dim * sizeof(double));
     /* initialize buffer */
-    buff = (int *)malloc(submat_dim * submat_dim * sizeof(int));
+    buff = (double *)malloc(submat_dim * submat_dim * sizeof(double));
 
     /* we are gonna shift the elements of matrix b upwards with the column fixed */
     source = (grid->my_row + 1) % grid->q;         /* pick the emmediately lower element */
