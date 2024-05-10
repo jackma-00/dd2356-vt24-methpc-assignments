@@ -1,6 +1,6 @@
 CC = cc
-TARGET = fox
-SRCS = fox.c
+TARGET = myprogram
+SRCS = test_fox.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
