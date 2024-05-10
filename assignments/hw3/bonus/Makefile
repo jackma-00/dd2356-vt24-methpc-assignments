@@ -7,10 +7,10 @@ HDRS = fox.h
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-    $(CC) $^ -o $@
+	$(CC) $^ -o $@
 
 %.o: %.c $(HDRS)
-    $(CC) -c $< -o $@
+	$(CC) -c $< -o $@
 
 clean:
-    rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET)
