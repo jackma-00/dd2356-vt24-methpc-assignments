@@ -180,13 +180,8 @@ void Fox(int n, GridInfo *grid, int **a, int **b, int **c)
 void initialiseAB()
 {
     int i, j;
-    /* *****************************************************************************************
-    Initialize the input matrix
-    Note: This initalization is deterministic & hence is done by every process in the same way
-          I wanted to design a fully distributed program, hence I took this strategy.
-          A better strategy could have been to let master alone initialize the matrices & then
-          send the slaves their local copy only
-    *******************************************************************************************/
+
+    /* Initialize the input matrix */
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < N; j++)
