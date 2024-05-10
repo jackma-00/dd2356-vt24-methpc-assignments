@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "mpi.h"
 #include "fox.h"
 
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("Test passed\n")
+    printf("Test passed\n");
 
         MPI_Finalize();
     exit(0);
