@@ -44,12 +44,17 @@ int main(int argc, char *argv[]){
 	}
 
 	//comunicate
-	//MPI_Ssend
+	//MPI_Send
 	
 	//Even nodes first send and then receive
 	if (rank%2==0){
-		MPI_Ssend(&f[2], 1, MPI_DOUBLE, prev, 0, MPI_COMM_WORLD);
-		MPI_Ssend(&f[nxn_loc-3], 1, MPI_DOUBLE, nxt, 1, MPI_COMM_WORLD);
+		/* `MPI_Send` is a blocking send operation in MPI (Message Passing Interface) that sends a message
+        from the calling process to a destination process. The "S" in `MPI_Send` stands for
+        "synchronous", which means that the send operation will not complete until the matching receive
+        operation has been posted by the destination process. This ensures that the sender and receiver
+        are synchronized in their communication. */
+        MPI_Send(&f[2], 1, MPI_DOUBLE, prev, 0, MPI_COMM_WORLD);
+		MPI_Send(&f[nxn_loc-3], 1, MPI_DOUBLE, nxt, 1, MPI_COMM_WORLD);
 		
     		MPI_Recv(&f[nxn_loc-1], 1, MPI_DOUBLE, nxt, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     		MPI_Recv(&f[0], 1, MPI_DOUBLE, prev, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE );
@@ -58,8 +63,8 @@ int main(int argc, char *argv[]){
     		MPI_Recv(&f[nxn_loc-1], 1, MPI_DOUBLE, nxt, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     		MPI_Recv(&f[0], 1, MPI_DOUBLE, prev, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE );
 		
-		MPI_Ssend(&f[2], 1, MPI_DOUBLE, prev, 0, MPI_COMM_WORLD);
-		MPI_Ssend(&f[nxn_loc-3], 1, MPI_DOUBLE, nxt, 1, MPI_COMM_WORLD);
+		MPI_Send(&f[2], 1, MPI_DOUBLE, prev, 0, MPI_COMM_WORLD);
+		MPI_Send(&f[nxn_loc-3], 1, MPI_DOUBLE, nxt, 1, MPI_COMM_WORLD);
 
 	}
 
