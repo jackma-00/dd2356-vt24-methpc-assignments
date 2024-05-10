@@ -2,14 +2,15 @@ CC = cc
 TARGET = myprogram
 SRCS = test_fox.c
 OBJS = $(SRCS:.c=.o)
+HDRS = fox.h
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $^ -o $@
+    $(CC) $^ -o $@
 
-%.o: %.c
-	$(CC) -c $< -o $@
+%.o: %.c $(HDRS)
+    $(CC) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+    rm -f $(OBJS) $(TARGET)
