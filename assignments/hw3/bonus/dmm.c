@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     double **localA;
     double **localB;
     double **localC;
-    double *C;
+    double **C;
     int rank, num_ranks, provided;
     double start_time, stop_time, loc_elapsed_time, elapsed_time;
 
