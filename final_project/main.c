@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+#include <stdlib.h>
+#include "activematter.h"
+
+int main(void)
+{
+
+    // Simulation parameters
+    float v0 = 1.0;           // velocity
+    float eta = 0.5;          // random fluctuation in angle (in radians)
+    int L = 10;               // size of box
+    int R = 1;                // interaction radius
+    float dt = 0.2;           // time step
+    int Nt = 200;             // number of time steps
+    int N = 500;              // number of birds
+    bool plotRealTime = true; // plot real time or not
+
+    // Simulation variables
+    double x[N], y[N];    // bird positions
+    double theta[N];      // bird angles
+    double vx[N], vy[N];  // bird velocities
+    double mean_theta[N]; // mean angle of neighbors
+
+    // Initialize
+    srand(17); // seed
+
+    // bird positions
+    update_bird_positions(&x, &y, N, L);
+
+    // bird velocities
+    update_bird_velocities(&vx, &vy, &theta, N, v0);
+
+    // Simulation Main  Loop
+    for (int i = 0; i < Nt; i++)
+    {
+        // move
+        move_birds(&x, &y, &vx, &vy, N, L, dt);
+
+        // Initialize mean_theta
+        for (int j = 0; j < N; j++)
+        {
+            mean_theta[j] = theta[j];
+        }
+
+        // find mean angle of neighbors within R
+        for (int b = 0; b < N; b++)
+        {
+            double sx_values[N], sy_values[N];
+
+            find_mean_angle_of_neighbors(x[b], y[b], &mean_theta, &theta, &x, &y, N, R, &sx_values, &sy_values, b);
+        }
+
+        for (int b = 0; b < N; b++)
+        {
+            // add random perturbations
+            theta[b] = mean_theta[b] + eta * (rand() / (double)RAND_MAX - 0.5);
+
+            // update velocity
+            vx[b] = v0 * cos(theta[b]);
+            vy[b] = v0 * sin(theta[b]);
+        }
+    }
+
+    printf("Simulation done\n");
+
+    return 0;
+}
