@@ -27,16 +27,16 @@ int main(void)
     srand(17); // seed
 
     // bird positions
-    update_bird_positions(&x, &y, N, L);
+    update_bird_positions(x, y, N, L);
 
     // bird velocities
-    update_bird_velocities(&vx, &vy, &theta, N, v0);
+    update_bird_velocities(vx, vy, theta, N, v0);
 
     // Simulation Main  Loop
     for (int i = 0; i < Nt; i++)
     {
         // move
-        move_birds(&x, &y, &vx, &vy, N, L, dt);
+        move_birds(x, y, vx, vy, N, L, dt);
 
         // Initialize mean_theta
         for (int j = 0; j < N; j++)
@@ -49,7 +49,7 @@ int main(void)
         {
             double sx_values[N], sy_values[N];
 
-            find_mean_angle_of_neighbors(x[b], y[b], &mean_theta, &theta, &x, &y, N, R, &sx_values, &sy_values, b);
+            find_mean_angle_of_neighbors(x[b], y[b], mean_theta, theta, x, y, N, R, sx_values, sy_values, b);
         }
 
         for (int b = 0; b < N; b++)
