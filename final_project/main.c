@@ -65,5 +65,20 @@ int main(void)
 
     printf("Simulation done\n");
 
+    // Write data to a text file
+    FILE *fp;
+    fp = fopen("data.txt", "w");
+    if (fp == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    for (int i = 0; i < N; i++) {
+        fprintf(fp, "%f %f %f %f\n", x[i], y[i], vx[i], vy[i]);
+    }
+
+    fclose(fp);
+
+
     return 0;
 }
