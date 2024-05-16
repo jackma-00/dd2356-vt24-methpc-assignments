@@ -3,6 +3,12 @@
 #include <math.h>
 #include <stdlib.h>
 
+double square(double x);
+void update_bird_positions(double *x, double *y, int N, int L);
+void update_bird_velocities(double *vx, double *vy, double *theta, int N, float v0);
+void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, float dt);
+void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R, double *sx, double *sy);
+
 int main(void)
 {
 
@@ -33,9 +39,9 @@ int main(void)
     {
         // move
         move_birds(&x, &y, &vx, &vy, N, L, dt);
-        
+
         double mean_theta[N];
-        
+
         for (int i = 0; i < N; i++)
         {
             mean_theta[i] = theta[i];
@@ -47,13 +53,12 @@ int main(void)
             // find mean angle of neighbors within R
             double sx[N], sy[N];
 
-            find_mean_angle_of_neighbors(x[j],y[j],&mean_theta, &theta, &x, &y, N, R, &sx, &sy);
+            find_mean_angle_of_neighbors(x[j], y[j], &mean_theta, &theta, &x, &y, N, R, &sx, &sy);
 
             // add random perturbations
             theta[j] = mean_theta[j] + eta * (rand() / (double)RAND_MAX - 0.5);
 
             // update velocity
-            
             vx[j] = v0 * cos(theta[j]);
             vy[j] = v0 * sin(theta[j]);
         }
@@ -69,24 +74,29 @@ double square(double x)
     return x * x;
 }
 
-void update_bird_positions(double *x, double *y, int N, int L){
-    for (int i = 0; i < N; i++){
-        x[i] = rand()/(double)RAND_MAX *L;
-        y[i] = rand()/(double)RAND_MAX *L;
+void update_bird_positions(double *x, double *y, int N, int L)
+{
+    for (int i = 0; i < N; i++)
+    {
+        x[i] = rand() / (double)RAND_MAX * L;
+        y[i] = rand() / (double)RAND_MAX * L;
     }
-
 }
 
-void update_bird_velocities(double *vx, double *vy, double *theta, int N, float v0){
-    for (int i = 0; i < N; i++){
-        theta[i] = 2 * M_PI * rand()/(double) RAND_MAX;
+void update_bird_velocities(double *vx, double *vy, double *theta, int N, float v0)
+{
+    for (int i = 0; i < N; i++)
+    {
+        theta[i] = 2 * M_PI * rand() / (double)RAND_MAX;
         vx[i] = v0 * cos(theta[i]);
         vy[i] = v0 * sin(theta[i]);
     }
 }
 
-void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, float dt){
-    for (int i = 0; i < N; i++){
+void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, float dt)
+{
+    for (int i = 0; i < N; i++)
+    {
         x[i] += vx[i] * dt;
         y[i] += vy[i] * dt;
 
@@ -96,13 +106,16 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
     }
 }
 
-void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R, double *sx, double *sy){
-    
+void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R, double *sx, double *sy)
+{
+
     for (int k = 0; k < N; k++)
     {
+        // TODO: flip x[k] and y[k] to x_val and y_val
         if ((square(x_val - x[k]) + square(y_val - y[k])) < square(R))
         {
-            sx[k] = sx[k] + cos(theta[k]);
+            // TODO: review and correct the following lines
+            sx = sx + cos(theta[k]);
             sy[k] = sy[k] + sin(theta[k]);
             mean_theta[k] = mean_theta[k] + atan2(sy[k], sx[k]);
         }
