@@ -84,26 +84,20 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
  *
  * @param x_current_bird The x-coordinate of the current bird.
  * @param y_current_bird The y-coordinate of the current bird.
- * @param mean_theta Pointer to the variable where the mean angle will be stored.
  * @param theta Array of angles for all birds.
  * @param x Array of x-coordinates for all birds.
  * @param y Array of y-coordinates for all birds.
  * @param N The total number of birds.
  * @param R The radius within which birds are considered neighbors.
- * @param sx_values Array to store the cos values of the angles for the neighbors.
- * @param sy_values Array to store the sin values of the angles for the neighbors.
- * @param b Index of the current bird.
  */
-void find_mean_angle_of_neighbors(
+double find_mean_angle_of_neighbors(
     double x_current_bird,
     double y_current_bird,
-    double *mean_theta,
     double *theta,
     double *x,
     double *y,
     int N,
-    int R,
-    int b)
+    int R)
 {
     double sx = 0, sy = 0; // sum of cos and sin of angles
 
@@ -117,6 +111,6 @@ void find_mean_angle_of_neighbors(
         }
     }
 
-    // calculate mean angle for the current bird
-    mean_theta[b] = atan2(sy, sx);
+    // return mean angle for the current bird
+    return atan2(sy, sx);
 }
