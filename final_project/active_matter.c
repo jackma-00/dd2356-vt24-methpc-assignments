@@ -6,8 +6,6 @@
 
 int main(int){
 
-
-
     //Simulation parameters
     float v0 = 1.0; //velocity
     float eta = 0.5; //random fluctuation in angle (in radians)
@@ -45,10 +43,13 @@ int main(int){
             //update position
             x[j] += vx[j] * dt;
             y[j] += vy[j] * dt;
-
+        
             //apply periodic BCs (Boundary Conditions)
             x[j] = fmod(x[j], L);
             y[j] = fmod(y[j], L);
+        }
+
+        for (int j = 0; j < N; j++){
 
             //find mean angle of neighbors within R
             float mean_theta = theta;
@@ -61,10 +62,14 @@ int main(int){
             angle += (2 * M_PI * rand() / RAND_MAX - M_PI) * eta;
             vx[j] = v0 * cos(angle);
             vy[j] = v0 * sin(angle);
+        
         }
 
 
     }
+
+
+
 
 
 
