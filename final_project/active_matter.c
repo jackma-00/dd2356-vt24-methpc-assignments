@@ -21,36 +21,18 @@ int main(void)
 
     // bird positions
     double x[N], y[N];
-    for (int i = 0; i < N; i++)
-    {
-        x[i] = rand() / (double)RAND_MAX * L;
-        y[i] = rand() / (double)RAND_MAX * L;
-    }
+    update_bird_positions(&x, &y, N, L);
 
     // bird velocities
     double vx[N], vy[N];
     double theta[N];
-    for (int i = 0; i < N; i++)
-    {
-        theta[i] = 2 * M_PI * rand() / (double)RAND_MAX;
-        vx[i] = v0 * cos(theta[i]);
-        vy[i] = v0 * sin(theta[i]);
-    }
+    update_bird_velocities(&vx, &vy, &theta, N, v0);
 
     // Simulation Main  Loop
     for (int i = 0; i < Nt; i++)
     {
         // move
-        for (int j = 0; j < N; j++)
-        {
-            // update position
-            x[j] += vx[j] * dt;
-            y[j] += vy[j] * dt;
-
-            // apply periodic BCs (Boundary Conditions)
-            x[j] = fmod(x[j], L);
-            y[j] = fmod(y[j], L);
-        }
+        move_birds(&x, &y, &vx, &vy, N, L, dt);
         
         double mean_theta[N];
         
@@ -64,6 +46,9 @@ int main(void)
 
             // find mean angle of neighbors within R
             double sx[N], sy[N];
+
+            find_mean_angle_of_neighbors(x[j],y[j],&mean_theta, &theta, &x, &y, N, R);
+
             for (int k = 0; k < N; k++)
             {
                 if ((x[j] - x[k]) * (x[j] - x[k]) + (y[j] - y[k]) * (y[j] - y[k]) < R * R)
@@ -86,4 +71,49 @@ int main(void)
     printf("Simulation done\n");
 
     return 0;
+}
+
+double square(double x)
+{
+    return x * x;
+}
+
+void update_bird_positions(double *x, double *y, int N, int L){
+    for (int i = 0; i < N; i++){
+        x[i] = rand()/(double)RAND_MAX *L;
+        y[i] = rand()/(double)RAND_MAX *L;
+    }
+
+}
+
+void update_bird_velocities(double *vx, double *vy, double *theta, int N, float v0){
+    for (int i = 0; i < N; i++){
+        theta[i] = 2 * M_PI * rand()/(double) RAND_MAX;
+        vx[i] = v0 * cos(theta[i]);
+        vy[i] = v0 * sin(theta[i]);
+    }
+}
+
+void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, float dt){
+    for (int i = 0; i < N; i++){
+        x[i] += vx[i] * dt;
+        y[i] += vy[i] * dt;
+
+        // apply periodic BCs (Boundary Conditions)
+        x[i] = fmod(x[i], L);
+        y[i] = fmod(y[i], L);
+    }
+}
+
+void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R){
+    
+    for (int k = 0; k < N; k++)
+    {
+        if ((square(x_val - x[k]) + square(y_val - y[k])) < square(R))
+        {
+            sx[k] = sx[k] + cos(theta[k]);
+            sy[k] = sy[k] + sin(theta[k]);
+            mean_theta[k] = mean_theta[k] + atan2(sy[k], sx[k]);
+        }
+    }
 }
