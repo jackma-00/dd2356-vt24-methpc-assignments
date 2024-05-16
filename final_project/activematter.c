@@ -103,8 +103,6 @@ void find_mean_angle_of_neighbors(
     double *y,
     int N,
     int R,
-    double *sx_values,
-    double *sy_values,
     int b)
 {
     double sx = 0, sy = 0; // sum of cos and sin of angles
@@ -114,16 +112,9 @@ void find_mean_angle_of_neighbors(
     {
         if ((square(x[i] - x_current_bird) + square(y[i] - y_current_bird)) < square(R))
         {
-            sx_values[i] = cos(theta[i]);
-            sy_values[i] = sin(theta[i]);
+            sx+=cos(theta[i]);
+            sy+=sin(theta[i]);
         }
-    }
-
-    // sum the cos and sin values
-    for (int i = 0; i < N; i++)
-    {
-        sx += sx_values[i];
-        sy += sy_values[i];
     }
 
     // calculate mean angle for the current bird

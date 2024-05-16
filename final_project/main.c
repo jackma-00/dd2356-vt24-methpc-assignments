@@ -47,9 +47,8 @@ int main(void)
         // find mean angle of neighbors within R
         for (int b = 0; b < N; b++)
         {
-            double sx_values[N], sy_values[N];
-
-            find_mean_angle_of_neighbors(x[b], y[b], mean_theta, theta, x, y, N, R, sx_values, sy_values, b);
+            
+            find_mean_angle_of_neighbors(x[b], y[b], mean_theta, theta, x, y, N, R, b);
         }
 
         for (int b = 0; b < N; b++)
