@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-int main(int)
+int main(void)
 {
 
     // Simulation parameters
@@ -84,4 +84,6 @@ int main(int)
     }
 
     printf("Simulation done\n");
+
+    return 0;
 }
