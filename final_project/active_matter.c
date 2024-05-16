@@ -47,7 +47,7 @@ int main(void)
             // find mean angle of neighbors within R
             double sx[N], sy[N];
 
-            find_mean_angle_of_neighbors(x[j],y[j],&mean_theta, &theta, &x, &y, N, R);
+            find_mean_angle_of_neighbors(x[j],y[j],&mean_theta, &theta, &x, &y, N, R, &sx, &sy);
 
             for (int k = 0; k < N; k++)
             {
@@ -105,7 +105,7 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
     }
 }
 
-void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R){
+void find_mean_angle_of_neighbors(double x_val, double y_val, double *mean_theta, double *theta, double *x, double *y, int N, int R, double *sx, double *sy){
     
     for (int k = 0; k < N; k++)
     {
