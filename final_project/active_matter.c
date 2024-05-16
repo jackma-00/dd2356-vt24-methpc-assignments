@@ -49,20 +49,11 @@ int main(void)
 
             find_mean_angle_of_neighbors(x[j],y[j],&mean_theta, &theta, &x, &y, N, R, &sx, &sy);
 
-            for (int k = 0; k < N; k++)
-            {
-                if ((x[j] - x[k]) * (x[j] - x[k]) + (y[j] - y[k]) * (y[j] - y[k]) < R * R)
-                {
-                    sx[k] = sx[k] + cos(theta[k]);
-                    sy[k] = sy[k] + sin(theta[k]);
-                    mean_theta[k] = mean_theta[k] + atan2(sy[k], sx[k]);
-                }
-            }
-
             // add random perturbations
             theta[j] = mean_theta[j] + eta * (rand() / (double)RAND_MAX - 0.5);
 
             // update velocity
+            
             vx[j] = v0 * cos(theta[j]);
             vy[j] = v0 * sin(theta[j]);
         }
