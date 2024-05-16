@@ -28,11 +28,11 @@ int main(int){
 
     // bird velocities
     double vx[N], vy[N];
-    double theta;
+    double theta[N];
     for (int i = 0; i < N; i++){
-        theta = 2 * M_PI * rand()/(double) RAND_MAX;
-        vx[i] = v0 * cos(theta);
-        vy[i] = v0 * sin(theta);
+        theta[i] = 2 * M_PI * rand()/(double) RAND_MAX;
+        vx[i] = v0 * cos(theta[i]);
+        vy[i] = v0 * sin(theta[i]);
     }
 
     // Simulation Main  Loop
@@ -48,23 +48,33 @@ int main(int){
             x[j] = fmod(x[j], L);
             y[j] = fmod(y[j], L);
         }
+        double mean_theta[N];
+        for (int i = 0; i < N; i++){
+            mean_theta[i] = theta[i];
+        }
 
         for (int j = 0; j < N; j++){
 
             //find mean angle of neighbors within R
-            float mean_theta = theta;
+            double sx[N], sy[N];
+            bool neighbors;
             for (int k = 0; k < N; k++){
-                
+                if ((x[j]-x[k])*(x[j]-x[k]) + (y[j]-y[k])* (y[j]-y[k]) < R*R){
+                    neighbors = true;
+                    sx[k] = sx[k]+cos(theta[k]);
+                    sy[k] = sy[k]+sin(theta[k]);
+                    mean_theta[k] = mean_theta[k] + atan2(sy[k], sx[k]);
+                }
             }
 
+            //add random perturbations
+            theta[j] = mean_theta[j]+eta*(rand()/(double)RAND_MAX-0.5);
+
             //update velocity
-            float angle = atan2(vy[j], vx[j]);
-            angle += (2 * M_PI * rand() / RAND_MAX - M_PI) * eta;
-            vx[j] = v0 * cos(angle);
-            vy[j] = v0 * sin(angle);
+            vx[j] = v0 * cos(theta[j]);
+            vy[j] = v0 * sin(theta[j]);
         
         }
-
 
     }
 
