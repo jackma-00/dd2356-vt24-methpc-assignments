@@ -22,17 +22,17 @@ int main(int){
     srand(17); //seed
 
     // bird positions
-    float x[N], y[N];
+    double x[N], y[N];
     for (int i = 0; i < N; i++){
-        x[i] = rand() % L;
-        y[i] = rand() % L;
+        x[i] = rand()/(double)RAND_MAX *L;
+        y[i] = rand()/(double)RAND_MAX *L;
     }
 
     // bird velocities
-    float vx[N], vy[N];
-    float theta
+    double vx[N], vy[N];
+    double theta;
     for (int i = 0; i < N; i++){
-        theta = 2 * M_PI * rand() / RAND_MAX;
+        theta = 2 * M_PI * rand()/(double) RAND_MAX;
         vx[i] = v0 * cos(theta);
         vy[i] = v0 * sin(theta);
     }
@@ -53,17 +53,7 @@ int main(int){
             //find mean angle of neighbors within R
             float mean_theta = theta;
             for (int k = 0; k < N; k++){
-                if (k != j){
-                    float dx = x[k] - x[j];
-                    float dy = y[k] - y[j];
-                    if (dx > L/2) dx -= L;
-                    if (dy > L/2) dy -= L;
-                    if (dx < -L/2) dx += L;
-                    if (dy < -L/2) dy += L;
-                    if (sqrt(dx*dx + dy*dy) < R){
-                        mean_theta += atan2(dy, dx);
-                    }
-                }
+                
             }
 
             //update velocity
