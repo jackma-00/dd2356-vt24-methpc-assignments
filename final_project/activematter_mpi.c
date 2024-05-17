@@ -119,14 +119,14 @@ double find_mean_angle_of_neighbors(
     int N,
     int R)
 {
-    int rank, num_ranks, provided;
+    //int rank, num_ranks, provided;
 
     double local_sx = 0, local_sy = 0; // Local sum of cos and sin of angles
     double global_sx = 0, global_sy = 0; // Global sum of cos and sin of angles
 
-    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+    //MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
+    //MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    //MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
     // Iterate over the neighbors
     for (int i = 0; i < N; i++)
@@ -142,7 +142,7 @@ double find_mean_angle_of_neighbors(
     MPI_Allreduce(&local_sx, &global_sx, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&local_sy, &global_sy, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    MPI_Finalize();
+    //MPI_Finalize();
     printf("global_sx = %f\n", global_sx);
     // return mean angle for the current bird
     return atan2(global_sy, global_sx);
