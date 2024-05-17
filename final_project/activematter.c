@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * Calculates the square of a given number.
@@ -74,8 +75,25 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
         y[i] += vy[i] * dt;
 
         // apply periodic BCs (Boundary Conditions)
-        x[i] = fmod(x[i], L);
-        y[i] = fmod(y[i], L);
+        //printf("Before x[i] = %f     ", x[i]);
+        //x[i] = fmod(x[i], (double) L);
+        //y[i] = fmod(y[i], (double) L);
+
+        if(x[i] < 0){
+            x[i] = L + x[i];
+        }else if(x[i] > L){
+            x[i] = x[i] - L;
+        }
+
+        if(y[i] < 0){
+            y[i] = L + y[i];
+        }else if(y[i] > L){
+            y[i] = y[i] - L;
+        }
+
+
+
+        //printf("x[i] = %f\n", x[i]);
     }
 }
 

@@ -44,7 +44,7 @@ vy=np.array(vy)
 # plot in real time
 plt.cla()
 plt.quiver(x,y,vx,vy)
-ax.set(xlim=(-L, L), ylim=(-L, L))
+ax.set(xlim=(0, L), ylim=(0, L))
 ax.set_aspect('equal')	
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
