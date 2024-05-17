@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         for (int b = 0; b < N; b++)
         {
             
-            mean_theta[b] = find_mean_angle_of_neighbors(x[b], y[b], theta, x, y, N, R);
+            mean_theta[b] = find_mean_angle_of_neighbors(argc, *argv, x[b], y[b], theta, x, y, N, R);
         }
 
         for (int b = 0; b < N; b++)
