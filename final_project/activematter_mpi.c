@@ -119,17 +119,33 @@ double find_mean_angle_of_neighbors(
     int N,
     int R)
 {
-    //int rank, num_ranks, provided;
+    int rank, num_ranks;
 
     double local_sx = 0, local_sy = 0; // Local sum of cos and sin of angles
     double global_sx = 0, global_sy = 0; // Global sum of cos and sin of angles
 
-    //MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
-    //MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    //MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+    // Initialize MPI
+    MPI_Init(NULL, NULL);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+
+    
+    // Get the rank of the current process and the total number of processes
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    // Calculate the start and end indices for this process
+    int chunk_size = N / world_size;
+    int start_index = world_rank * chunk_size;
+    int end_index = (world_rank + 1) * chunk_size;
+    if (world_rank == world_size - 1) {
+        end_index = N; // Last process takes the remaining elements
+    }
 
     // Iterate over the neighbors
-    for (int i = 0; i < N; i++)
+    for (int i = start_index; i < end_index; i++)
     {
         if ((pow(x[i] - x_current_bird, 2) + pow(y[i] - y_current_bird, 2)) < pow(R, 2))
         {
@@ -142,7 +158,9 @@ double find_mean_angle_of_neighbors(
     MPI_Allreduce(&local_sx, &global_sx, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&local_sy, &global_sy, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    //MPI_Finalize();
+    // Finalize MPI
+    MPI_Finalize();
+
     printf("global_sx = %f\n", global_sx);
     // return mean angle for the current bird
     return atan2(global_sy, global_sx);
