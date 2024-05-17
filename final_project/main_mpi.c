@@ -2,9 +2,9 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
-#include "activematter_omp.h"
+#include "activematter_mpi.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
 
     // Simulation parameters

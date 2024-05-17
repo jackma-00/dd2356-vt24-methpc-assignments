@@ -102,6 +102,8 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
 /**
  * Calculates the mean angle of the neighbors for a given bird.
  *
+ * @param argc The number of command line arguments.
+ * @param argv The command line arguments.
  * @param x_current_bird The x-coordinate of the current bird.
  * @param y_current_bird The y-coordinate of the current bird.
  * @param theta Array of angles for all birds.
@@ -111,6 +113,8 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
  * @param R The radius within which birds are considered neighbors.
  */
 double find_mean_angle_of_neighbors(
+    int argc, 
+    char *argv[],
     double x_current_bird,
     double y_current_bird,
     double *theta,
@@ -119,35 +123,29 @@ double find_mean_angle_of_neighbors(
     int N,
     int R)
 {
-    int rank, num_ranks;
+    int rank, num_ranks, provided;
 
     double local_sx = 0, local_sy = 0; // Local sum of cos and sin of angles
     double global_sx = 0, global_sy = 0; // Global sum of cos and sin of angles
 
     // Initialize MPI
-    MPI_Init(NULL, NULL);
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
-    
-    // Get the rank of the current process and the total number of processes
-    int world_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-    int world_size;
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-
+    // Iterate over the neighbors
     // Calculate the start and end indices for this process
-    int chunk_size = N / world_size;
-    int start_index = world_rank * chunk_size;
-    int end_index = (world_rank + 1) * chunk_size;
-    if (world_rank == world_size - 1) {
+    int chunk_size = N / num_ranks;
+    int start_index = rank * chunk_size;
+    int end_index = (rank + 1) * chunk_size;
+    if (rank == num_ranks - 1) {
         end_index = N; // Last process takes the remaining elements
     }
 
     // Iterate over the neighbors
     for (int i = start_index; i < end_index; i++)
     {
-        if ((pow(x[i] - x_current_bird, 2) + pow(y[i] - y_current_bird, 2)) < pow(R, 2))
+        if ((square(x[i] - x_current_bird) + square(y[i] - y_current_bird)) < square(R))
         {
             local_sx += cos(theta[i]);
             local_sy += sin(theta[i]);
