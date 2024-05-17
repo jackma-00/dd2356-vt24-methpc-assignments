@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
 /**
  * Calculates the square of a given number.
  *
@@ -118,7 +120,7 @@ double find_mean_angle_of_neighbors(
     int R)
 {
     double sx = 0, sy = 0; // sum of cos and sin of angles
-
+ 
     // Iterate over the neighbors
     for (int i = 0; i < N; i++)
     {

@@ -1,6 +1,6 @@
 CC = cc
 TARGET = myexecutable
-SRCS = main.c activematter.c
+SRCS = main.c activematter_serial.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)

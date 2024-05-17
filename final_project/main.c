@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
-#include "activematter.h"
+#include "activematter_serial.h"
 
 int main(void)
 {
