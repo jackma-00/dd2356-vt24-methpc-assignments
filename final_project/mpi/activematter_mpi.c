@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <mpi.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -80,10 +79,6 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
         y[i] += vy[i] * dt;
 
         // apply periodic BCs (Boundary Conditions)
-        // printf("Before x[i] = %f     ", x[i]);
-        // x[i] = fmod(x[i], (double) L);
-        // y[i] = fmod(y[i], (double) L);
-
         if (x[i] < 0)
         {
             x[i] = L + x[i];
@@ -101,16 +96,14 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
         {
             y[i] = y[i] - L;
         }
-
-        // printf("x[i] = %f\n", x[i]);
     }
 }
 
 /**
  * Calculates the mean angle of the neighbors for a given bird.
  *
- * @param argc The number of command line arguments.
- * @param argv The command line arguments.
+ * @param rank The rank of the current MPI process.
+ * @param num_ranks The number of MPI ranks.
  * @param x_current_bird The x-coordinate of the current bird.
  * @param y_current_bird The y-coordinate of the current bird.
  * @param theta Array of angles for all birds.
@@ -120,8 +113,8 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
  * @param R The radius within which birds are considered neighbors.
  */
 double find_mean_angle_of_neighbors(
-    int argc,
-    char *argv[],
+    int rank,
+    int num_ranks,
     double x_current_bird,
     double y_current_bird,
     double *theta,
@@ -130,44 +123,39 @@ double find_mean_angle_of_neighbors(
     int N,
     int R)
 {
-    int rank, num_ranks, provided;
-
-    double local_sx = 0, local_sy = 0;   // Local sum of cos and sin of angles
-    double global_sx = 0, global_sy = 0; // Global sum of cos and sin of angles
-
-    // Initialize MPI
-    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+    double local_sx = 0, local_sy = 0; // Local sum of cos and sin of angles
+    double total_sx = 0, total_sy = 0; // Total sum of cos and sin of angles
+    double atan = 0;                   // Mean angle
 
     // Iterate over the neighbors
-    // Calculate the start and end indices for this process
     int chunk_size = N / num_ranks;
-    int start_index = rank * chunk_size;
-    int end_index = (rank + 1) * chunk_size;
-    if (rank == num_ranks - 1)
-    {
-        end_index = N; // Last process takes the remaining elements
-    }
+
+    // Synchronization point
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // Iterate over the neighbors
-    for (int i = start_index; i < end_index; i++)
+    for (int iter = 0; iter < chunk_size; iter++)
     {
-        if ((square(x[i] - x_current_bird) + square(y[i] - y_current_bird)) < square(R))
+        if ((square(x[iter] - x_current_bird) + square(y[iter] - y_current_bird)) < square(R))
         {
-            local_sx += cos(theta[i]);
-            local_sy += sin(theta[i]);
+            local_sx += cos(theta[iter]);
+            local_sy += sin(theta[iter]);
         }
     }
 
-    // Reduce local sums to global sums
-    MPI_Allreduce(&local_sx, &global_sx, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-    MPI_Allreduce(&local_sy, &global_sy, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    // Reduce the local sums to the total sum
+    MPI_Reduce(&local_sx, &total_sx, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_sy, &total_sy, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    // Calculate the mean angle
+    if (rank == 0)
+    {
+        atan = atan2(total_sy, total_sx);
+    }
 
     // Finalize MPI
     MPI_Finalize();
 
-    printf("global_sx = %f\n", global_sx);
     // return mean angle for the current bird
-    return atan2(global_sy, global_sx);
+    return atan;
 }

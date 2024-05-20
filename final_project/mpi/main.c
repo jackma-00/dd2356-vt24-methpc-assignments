@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
+#include <mpi.h>
 #include "activematter_mpi.h"
 
 int main(int argc, char *argv[])
@@ -23,8 +24,16 @@ int main(int argc, char *argv[])
     double vx[N], vy[N];  // bird velocities
     double mean_theta[N]; // mean angle of neighbors
 
-    // Initialize
-    srand(17); // seed
+    // MPI variables
+    int rank, num_ranks, provided;
+
+    // Initialize MPI
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+
+    // Seed the random number generator
+    srand(17 * rank);
 
     // bird positions
     update_bird_positions(x, y, N, L);
@@ -48,7 +57,7 @@ int main(int argc, char *argv[])
         for (int b = 0; b < N; b++)
         {
 
-            mean_theta[b] = find_mean_angle_of_neighbors(argc, argv, x[b], y[b], theta, x, y, N, R);
+            mean_theta[b] = find_mean_angle_of_neighbors(rank, num_ranks, [b], y[b], theta, x, y, N, R);
         }
 
         for (int b = 0; b < N; b++)
