@@ -3,26 +3,23 @@
 #include <math.h>
 #include <stdlib.h>
 #include <mpi.h>
-#include "activematter_mpi.h"
+
+void update_bird_positions(double *x, double *y, int N, int L);
+void update_bird_velocities(double *vx, double *vy, double *theta, int N, float v0);
+void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, float dt);
+double find_mean_angle_of_neighbors(double x_current_bird, double y_current_bird, double *theta, double *x, double *y, int N, int R);
 
 int main(int argc, char *argv[])
 {
-
     // Simulation parameters
-    float v0 = 1.0;           // velocity
-    float eta = 0.5;          // random fluctuation in angle (in radians)
-    int L = 10;               // size of box
-    int R = 1;                // interaction radius
-    float dt = 0.2;           // time step
-    int Nt = 200;             // number of time steps
-    int N = 500;              // number of birds
-    bool plotRealTime = true; // plot real time or not
-
-    // Simulation variables
-    double x[N], y[N];    // bird positions
-    double theta[N];      // bird angles
-    double vx[N], vy[N];  // bird velocities
-    double mean_theta[N]; // mean angle of neighbors
+    float v0 = 1.0;
+    float eta = 0.5;
+    int L = 10;
+    int R = 1;
+    float dt = 0.2;
+    int Nt = 200;
+    int N = 500;
+    bool plotRealTime = true;
 
     // MPI variables
     int rank, num_ranks, provided;
@@ -32,62 +29,47 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
+    // Determine the number of birds per process
+    int birds_per_proc = N / num_ranks;
+    int start = rank * birds_per_proc;
+    int end = (rank == num_ranks - 1) ? N : start + birds_per_proc;
+
+    // Simulation variables
+    double x[N], y[N], theta[N], vx[N], vy[N], mean_theta[N];
+
     // Seed the random number generator
     srand(17 * rank);
 
-    // bird positions
+    // Initialize bird positions and velocities
     update_bird_positions(x, y, N, L);
-
-    // bird velocities
     update_bird_velocities(vx, vy, theta, N, v0);
 
-    // Simulation Main  Loop
+    // Simulation Main Loop
     for (int i = 0; i < Nt; i++)
     {
-        // move
+        // Move birds
         move_birds(x, y, vx, vy, N, L, dt);
 
-        // Initialize mean_theta
-        for (int j = 0; j < N; j++)
+        // Find mean angle of neighbors within R for local birds
+        for (int b = start; b < end; b++)
         {
-            mean_theta[j] = theta[j];
+            mean_theta[b] = find_mean_angle_of_neighbors(x[b], y[b], theta, x, y, N, R);
         }
 
-        // find mean angle of neighbors within R
-        for (int b = 0; b < N; b++)
-        {
+        // Synchronize the mean_theta values across all processes
+        MPI_Allgather(MPI_IN_PLACE, birds_per_proc, MPI_DOUBLE, mean_theta, birds_per_proc, MPI_DOUBLE, MPI_COMM_WORLD);
 
-            mean_theta[b] = find_mean_angle_of_neighbors(rank, num_ranks, [b], y[b], theta, x, y, N, R);
-        }
-
-        for (int b = 0; b < N; b++)
+        // Update velocities with new angles and random perturbations
+        for (int b = start; b < end; b++)
         {
-            // add random perturbations
             theta[b] = mean_theta[b] + eta * (rand() / (double)RAND_MAX - 0.5);
-
-            // update velocity
             vx[b] = v0 * cos(theta[b]);
             vy[b] = v0 * sin(theta[b]);
         }
     }
 
-    printf("Simulation done\n");
-
-    // Write data to a text file
-    FILE *fp;
-    fp = fopen("data.txt", "w");
-    if (fp == NULL)
-    {
-        perror("Error opening file");
-        return 1;
-    }
-
-    for (int i = 0; i < N; i++)
-    {
-        fprintf(fp, "%f %f %f %f\n", x[i], y[i], vx[i], vy[i]);
-    }
-
-    fclose(fp);
+    // Finalize MPI
+    MPI_Finalize();
 
     return 0;
 }
