@@ -1,12 +1,12 @@
 CC = cc
-TARGET = myexecutable
-SRCS = main.c activematter.c
+TARGET = myexecutable.out
+SRCS = main.c activematter_mpi.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $^ -o $@
+	$(CC) $^ -lm -o $@
 
 %.o: %.c
 	$(CC) -c $< -o $@
