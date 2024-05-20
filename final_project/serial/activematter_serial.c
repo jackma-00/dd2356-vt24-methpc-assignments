@@ -1,8 +1,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <omp.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 /**
  * Calculates the square of a given number.
@@ -77,25 +79,23 @@ void move_birds(double *x, double *y, double *vx, double *vy, int N, int L, floa
         y[i] += vy[i] * dt;
 
         // apply periodic BCs (Boundary Conditions)
-        //printf("Before x[i] = %f     ", x[i]);
-        //x[i] = fmod(x[i], (double) L);
-        //y[i] = fmod(y[i], (double) L);
-
-        if(x[i] < 0){
+        if (x[i] < 0)
+        {
             x[i] = L + x[i];
-        }else if(x[i] > L){
+        }
+        else if (x[i] > L)
+        {
             x[i] = x[i] - L;
         }
 
-        if(y[i] < 0){
+        if (y[i] < 0)
+        {
             y[i] = L + y[i];
-        }else if(y[i] > L){
+        }
+        else if (y[i] > L)
+        {
             y[i] = y[i] - L;
         }
-
-
-
-        //printf("x[i] = %f\n", x[i]);
     }
 }
 
@@ -120,19 +120,17 @@ double find_mean_angle_of_neighbors(
     int R)
 {
     double sx = 0, sy = 0; // sum of cos and sin of angles
- 
+
     // Iterate over the neighbors
-    #pragma omp parallel for reduction(+:sx,sy)
     for (int i = 0; i < N; i++)
     {
         if ((square(x[i] - x_current_bird) + square(y[i] - y_current_bird)) < square(R))
         {
-            sx+=cos(theta[i]);
-            sy+=sin(theta[i]);
+            sx += cos(theta[i]);
+            sy += sin(theta[i]);
         }
     }
 
     // return mean angle for the current bird
     return atan2(sy, sx);
 }
-

@@ -47,7 +47,7 @@ int main(void)
         // find mean angle of neighbors within R
         for (int b = 0; b < N; b++)
         {
-            
+
             mean_theta[b] = find_mean_angle_of_neighbors(x[b], y[b], theta, x, y, N, R);
         }
 
@@ -67,7 +67,8 @@ int main(void)
     // Write data to a text file
     FILE *fp;
     fp = fopen("data.txt", "w");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         perror("Error opening file");
         return 1;
     }
@@ -77,7 +78,6 @@ int main(void)
     }
 
     fclose(fp);
-
 
     return 0;
 }
