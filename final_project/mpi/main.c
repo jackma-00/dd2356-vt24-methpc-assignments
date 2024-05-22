@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     double x[N], y[N], theta[N], vx[N], vy[N], mean_theta[N];
 
     // Seed the random number generator
-    srand(17 * rank);
+    srand(17);
 
     // Initialize bird positions and velocities
     update_bird_positions(x, y, N, L);
@@ -70,6 +70,24 @@ int main(int argc, char *argv[])
 
     // Finalize MPI
     MPI_Finalize();
+
+    printf("Simulation done\n");
+
+    // Write data to a text file
+    FILE *fp;
+    fp = fopen("data.txt", "w");
+    if (fp == NULL)
+    {
+        perror("Error opening file");
+        return 1;
+    }
+
+    for (int i = 0; i < N; i++)
+    {
+        fprintf(fp, "%f %f %f %f\n", x[i], y[i], vx[i], vy[i]);
+    }
+
+    fclose(fp);
 
     return 0;
 }
