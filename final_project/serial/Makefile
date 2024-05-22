@@ -3,6 +3,8 @@ TARGET = myexecutable.out
 SRCS = main.c activematter_serial.c
 OBJS = $(SRCS:.c=.o)
 
+PHONY: all clean stat
+
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
@@ -13,3 +15,7 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+stat: 
+	perf stat ./$(TARGET)
+
