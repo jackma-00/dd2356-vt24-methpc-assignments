@@ -1,7 +1,7 @@
 # On Dardel
-CC = cc
+#CC = cc
 # On my laptop
-#CC = mpicc
+CC = mpicc
 # Installed MPICH
 # - From source at https://www.mpich.org/downloads/
 # - ./configure, make, make install
@@ -12,7 +12,7 @@ OBJS = $(SRCS:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $^ -o $@
+	$(CC) $^ -lm -o $@
 
 %.o: %.c
 	$(CC) -c $< -o $@

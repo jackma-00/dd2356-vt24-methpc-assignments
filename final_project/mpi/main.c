@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
     // Seed the random number generator
-    srand(17 * rank);
+    srand(17);
 
     // bird positions
     update_bird_positions(x, y, N, L);
@@ -47,17 +47,11 @@ int main(int argc, char *argv[])
         // move
         move_birds(x, y, vx, vy, N, L, dt);
 
-        // Initialize mean_theta
-        for (int j = 0; j < N; j++)
-        {
-            mean_theta[j] = theta[j];
-        }
-
         // find mean angle of neighbors within R
         for (int b = 0; b < N; b++)
         {
 
-            mean_theta[b] = find_mean_angle_of_neighbors(rank, num_ranks, [b], y[b], theta, x, y, N, R);
+            mean_theta[b] = find_mean_angle_of_neighbors(rank, num_ranks, x[b], y[b], theta, x, y, N, R);
         }
 
         for (int b = 0; b < N; b++)
@@ -70,6 +64,9 @@ int main(int argc, char *argv[])
             vy[b] = v0 * sin(theta[b]);
         }
     }
+
+    // Finalize MPI
+    MPI_Finalize();
 
     printf("Simulation done\n");
 

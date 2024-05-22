@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <mpi.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -129,6 +130,8 @@ double find_mean_angle_of_neighbors(
 
     // Iterate over the neighbors
     int chunk_size = N / num_ranks;
+    //int start = rank * chunk_size;
+    //int end = (rank + 1) * chunk_size;
 
     // Synchronization point
     MPI_Barrier(MPI_COMM_WORLD);
@@ -150,12 +153,9 @@ double find_mean_angle_of_neighbors(
     // Calculate the mean angle
     if (rank == 0)
     {
-        atan = atan2(total_sy, total_sx);
+        return atan2(total_sy, total_sx);
     }
 
-    // Finalize MPI
-    MPI_Finalize();
-
     // return mean angle for the current bird
-    return atan;
+    //return atan;
 }
