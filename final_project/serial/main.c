@@ -38,12 +38,6 @@ int main(void)
         // move
         move_birds(x, y, vx, vy, N, L, dt);
 
-        // Initialize mean_theta
-        for (int j = 0; j < N; j++)
-        {
-            mean_theta[j] = theta[j];
-        }
-
         // find mean angle of neighbors within R
         for (int b = 0; b < N; b++)
         {
