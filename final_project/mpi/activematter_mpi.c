@@ -130,8 +130,6 @@ double find_mean_angle_of_neighbors(
 
     // Iterate over the neighbors
     int chunk_size = N / num_ranks;
-    //int start = rank * chunk_size;
-    //int end = (rank + 1) * chunk_size;
 
     // Synchronization point
     MPI_Barrier(MPI_COMM_WORLD);
@@ -155,7 +153,4 @@ double find_mean_angle_of_neighbors(
     {
         return atan2(total_sy, total_sx);
     }
-
-    // return mean angle for the current bird
-    //return atan;
 }
