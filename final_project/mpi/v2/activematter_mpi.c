@@ -130,12 +130,14 @@ double find_mean_angle_of_neighbors(
 
     // Iterate over the neighbors
     int chunk_size = N / num_ranks;
+    int start = rank * chunk_size;
+    int end = (rank + 1) * chunk_size;
 
     // Synchronization point
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Iterate over the neighbors
-    for (int iter = 0; iter < chunk_size; iter++)
+    for (int iter = start; iter < end; iter++)
     {
         if ((square(x[iter] - x_current_bird) + square(y[iter] - y_current_bird)) < square(R))
         {
@@ -145,12 +147,9 @@ double find_mean_angle_of_neighbors(
     }
 
     // Reduce the local sums to the total sum
-    MPI_Reduce(&local_sx, &total_sx, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&local_sy, &total_sy, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_sx, &total_sx, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_sy, &total_sy, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    // Calculate the mean angle
-    if (rank == 0)
-    {
-        return atan2(total_sy, total_sx);
-    }
+    // return mean angle for the current bird
+    return atan2(total_sy, total_sx);
 }
