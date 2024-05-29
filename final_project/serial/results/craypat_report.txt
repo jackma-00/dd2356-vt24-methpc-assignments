@@ -1,0 +1,375 @@
+CrayPat/X:  Version 23.12.0 Revision 67ffc52e7 sles15.4_x86_64  11/13/23 21:04:20
+
+Number of PEs (MPI ranks):    1
+
+Numbers of PEs per Node:      1
+
+Numbers of Threads per PE:    1
+
+Number of Cores per Socket:  64
+
+Execution start time:  Wed May 29 14:40:24 2024
+
+System name and speed:  nid002585  2.930 GHz (nominal)
+
+AMD   Rome                 CPU  Family: 23  Model: 49  Stepping:  0
+
+Core Performance Boost:  1 PE has CPB capability
+
+Current path to data file:
+  /cfs/klemming/home/j/jmaragna/dd2356-vt24-methpc-assignments/final_project/serial/myexecutable.out+orig+pat+748597-65572699s   (RTS)
+
+Processing step 1 of 10
+Suggested trace options file:   myexecutable.out+orig+pat+748597-65572699s/build-options.apa
+
+
+Notes for table 1:
+
+  This table shows functions that have significant exclusive sample
+    hits, averaged across ranks.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O samp_profile ...
+
+Table 1:  Sample Profile by Function
+
+  Samp% | Samp | Group
+        |      |  Function
+
+ 100.0% | 56.0 | Total
+|--------------------------------------------
+|  71.4% | 40.0 | USER
+||-------------------------------------------
+||  60.7% | 34.0 | find_mean_angle_of_neighbors
+||  10.7% |  6.0 | square
+||===========================================
+|  25.0% | 14.0 | ETC
+||-------------------------------------------
+||  16.1% |  9.0 | __cos_fma
+||   8.9% |  5.0 | __sin_fma
+||===========================================
+|   1.8% |  1.0 | MATH
+||-------------------------------------------
+||   1.8% |  1.0 | atan2
+||===========================================
+|   1.8% |  1.0 | STDIO
+||-------------------------------------------
+||   1.8% |  1.0 | fprintf
+|============================================
+Processing step 3 of 10
+Notes for table 2:
+
+  This table shows functions, and line numbers within functions, that
+    have significant exclusive sample hits, averaged across ranks.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O samp_profile+src ...
+
+Table 2:  Sample Profile by Group, Function, and Line
+
+  Samp% | Samp | Group
+        |      |  Function
+        |      |   Source
+        |      |    Line
+
+ 100.0% | 56.0 | Total
+|-----------------------------------------------------------------------------
+|  71.4% | 40.0 | USER
+||----------------------------------------------------------------------------
+||  60.7% | 34.0 | find_mean_angle_of_neighbors
+3|        |      |  dd2356-vt24-methpc-assignments/final_project/serial/activematter_serial.c
+||||--------------------------------------------------------------------------
+4|||  46.4% | 26.0 | line.127
+4|||  10.7% |  6.0 | line.129
+4|||   3.6% |  2.0 | line.132
+||||==========================================================================
+||  10.7% |  6.0 | square
+3|        |      |  dd2356-vt24-methpc-assignments/final_project/serial/activematter_serial.c
+||||--------------------------------------------------------------------------
+4|||   5.4% |  3.0 | line.16
+4|||   3.6% |  2.0 | line.17
+||============================================================================
+|  25.0% | 14.0 | ETC
+||----------------------------------------------------------------------------
+||  16.1% |  9.0 | __cos_fma
+||   8.9% |  5.0 | __sin_fma
+||============================================================================
+|   1.8% |  1.0 | MATH
+||----------------------------------------------------------------------------
+||   1.8% |  1.0 | atan2
+||============================================================================
+|   1.8% |  1.0 | STDIO
+||----------------------------------------------------------------------------
+||   1.8% |  1.0 | fprintf
+|=============================================================================
+Processing step 4 of 10
+Notes for table 3:
+
+  This table shows HW performance counter data for the whole program,
+    averaged across ranks or threads, as applicable.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O hwpc ...
+
+Table 3:  Program HW Performance Counter Data
+
+Total
+
+
+==============================================================================
+  Total
+------------------------------------------------------------------------------
+  Thread Time                              0.600682 secs
+  CORE_TO_L2_CACHEABLE_REQUEST_ACCESS_STATUS:
+    LS_RD_BLK_C                              17,662
+  L2_PREFETCH_HIT_L2                         43,179
+  L2_PREFETCH_HIT_L3                        137,623
+  REQUESTS_TO_L2_GROUP1:L2_HW_PF            183,895
+  REQUESTS_TO_L2_GROUP1:RD_BLK_X             13,597
+  Cache Lines PF from OffCore  0.234 M/sec  140,716 lines
+  Cache Lines PF from Memory   0.005 M/sec    3,093 lines
+  Cache Lines Requested from
+    Memory                   646.296  /sec   388.22 lines
+  Write Memory Traffic GBytes  0.024 M/sec     0.00 GB
+  Read Memory Traffic GBytes   0.371 M/sec     0.00 GB
+  Memory traffic GBytes        0.395 M/sec     0.00 GB
+  Memory Traffic / Nominal Peak                0.0%
+==============================================================================
+Processing step 5 of 10
+Notes for table 4:
+
+  This table show the average time and number of bytes written to each
+    output file, taking the average over the number of ranks that
+    wrote to the file.  It also shows the number of write operations,
+    and average rates.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O write_stats ...
+
+Table 4:  File Output Stats by Filename
+
+      Avg |      Avg |  Write Rate | Number |    Avg | Bytes/ | File Name=!x/^/(proc|sys)/
+    Write |    Write | MiBytes/sec |     of | Writes |   Call |  PE=HIDE
+ Time per |  MiBytes |             | Writer |    per |        |
+   Writer |      per |             |  Ranks | Writer |        |
+     Rank |   Writer |             |        |   Rank |        |
+          |     Rank |             |        |        |        |
+|-----------------------------------------------------------------------------
+| 0.000867 | 0.017643 |   20.354781 |      1 |  500.0 |  37.00 | data.txt
+| 0.000018 | 0.000015 |    0.836373 |      1 |    1.0 |  16.00 | stdout
+|=============================================================================
+Processing step 6 of 10
+Table 5:  Lustre File Information
+
+     File |    Stripe | Stripe | Stripe | OST list
+     Path |      size | offset |  count |
+--------------------------------------------------
+ data.txt | 1,048,576 |      0 |      1 | 0
+==================================================
+Processing step 7 of 10
+Notes for table 6:
+
+  This table shows energy and power usage for the nodes with the
+    maximum, mean, and minimum usage, as well as the sum of usage over
+    all nodes.
+    Energy and power for accelerators is also shown, if available.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O program_energy ...
+
+Table 6:  Program Energy and Power Usage from Cray PM
+
+Total
+
+
+==========================================================
+  Total
+----------------------------------------------------------
+  PM Energy Node    512 W      320 J
+  PM Energy Cpu     264 W      165 J
+  PM Energy Memory  126 W       79 J
+  Process Time            0.625576 secs
+==========================================================
+Processing step 8 of 10
+Notes for table 7:
+
+  This table shows values shown for HiMem calculated from information
+    in the /proc/self/numa_maps files captured near the end of the
+    program. It is the total size of all pages, including huge pages,
+    that were actually mapped into physical memory from both private
+    and shared memory segments.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O himem ...
+
+Table 7:  Memory High Water Mark by Numa Node
+
+Numanode
+
+
+============================================================================
+  numanode.7
+----------------------------------------------------------------------------
+  Process HiMem (MiBytes)          37.7
+  HiMem Numa Node 0 (MiBytes)       4.1 MiBytes
+  HiMem Numa Node 1 (MiBytes)       1.7 MiBytes
+  HiMem Numa Node 2 (MiBytes)       0.9 MiBytes
+  HiMem Numa Node 3 (MiBytes)       0.9 MiBytes
+  HiMem Numa Node 4 (MiBytes)       0.9 MiBytes
+  HiMem Numa Node 5 (MiBytes)       0.9 MiBytes
+  HiMem Numa Node 6 (MiBytes)       0.9 MiBytes
+  HiMem Numa Node 7 (MiBytes)      27.6 MiBytes
+============================================================================
+Processing step 9 of 10
+Notes for table 8:
+
+  This table shows memory traffic for numa nodes, taking for each numa
+    node the maximum value across nodes. It also shows the balance in
+    memory traffic by showing the top 3 and bottom 3 node values.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O mem_bw ...
+
+Table 8:  Memory Bandwidth by Numanode
+
+  Memory |    Read |   Write |   Thread |  Memory |  Memory | Numanode
+ Traffic |  Memory |  Memory |     Time | Traffic | Traffic |
+  GBytes | Traffic | Traffic |          |  GBytes |       / |
+         |  GBytes |  GBytes |          |   / Sec | Nominal |
+         |         |         |          |         |    Peak |
+|-----------------------------------------------------------------------
+|    0.00 |    0.00 |    0.00 | 0.600682 |    0.00 |    0.0% | numanode.7
+|=======================================================================
+Processing step 10 of 10
+
+Notes for table 9:
+
+  This table shows total wall clock time for the ranks with the
+    maximum, mean, and minimum time, as well as the average across
+    ranks.
+    It also shows maximum memory usage from /proc/self/numa_maps for
+    those ranks, and on average.  The usage is total size of all
+    pages, including huge pages, that were actually mapped into
+    physical memory from both private and shared memory segments.
+  For further explanation, see the "General table notes" below, or
+    use:  pat_report -v -O program_time ...
+
+Table 9:  Wall Clock Time, Memory High Water Mark
+
+  Process |   Process | Total
+     Time |     HiMem |
+          | (MiBytes) |
+-----------------------------
+ 0.625576 |      37.7 | Total
+=============================
+
+========================  Additional details  ========================
+
+General table notes:
+
+    The default notes for a table are based on the default definition of
+    the table, and do not account for the effects of command-line options
+    that may modify the content of the table.
+
+    Detailed notes, produced by the pat_report -v option, do account for
+    all command-line options, and also show how data is aggregated, and
+    if the table content is limited by thresholds, rank selections, etc.
+
+    An imbalance metric in a line is based on values in main threads
+    across multiple ranks, or on values across all threads, as applicable.
+
+    An imbalance percent in a line is relative to the maximum value
+    for that line across ranks or threads, as applicable.
+
+    If the number of Calls for a function is shown as "--", then that
+    function was not traced and the other values in its line summarize
+    the data collected for functions that it calls and that were traced.
+
+Experiment:  samp_cs_time
+
+Sampling interval:  10000 microsecs
+
+Original path to data file:
+  /cfs/klemming/home/j/jmaragna/dd2356-vt24-methpc-assignments/final_project/serial/myexecutable.out+orig+pat+748597-65572699s/xf-files   (RTS)
+
+Original program:
+  /cfs/klemming/home/j/jmaragna/dd2356-vt24-methpc-assignments/final_project/serial/myexecutable.out+orig
+
+Instrumented with:  pat_build myexecutable.out+orig
+
+  Option file "apa" contained:
+    -Drtenv=PAT_RT_PERFCTR=default_samp
+    -Drtenv=PAT_RT_EXPERIMENT=samp_cs_time
+    -Drtenv=PAT_RT_SAMPLING_MODE=3
+    -g upc
+    -g caf
+    -g mpi
+    -g shmem
+    -g syscall
+    -g io
+    -g dl
+
+Instrumented program:
+  /cfs/klemming/home/j/jmaragna/dd2356-vt24-methpc-assignments/final_project/serial/./myexecutable.out+orig+pat
+
+Program invocation:
+  /cfs/klemming/home/j/jmaragna/dd2356-vt24-methpc-assignments/final_project/serial/./myexecutable.out+orig+pat
+
+Exit Status:  0 for 1 PE
+
+Memory pagesize:  4 KiB
+
+Memory hugepagesize:  Not Available
+
+Programming environment:  CRAY
+
+Runtime environment variables:
+  CRAYPAT_COMPILER_OPTIONS=1
+  CRAYPAT_LD_LIBRARY_PATH=/opt/cray/pe/perftools/23.12.0/lib64
+  CRAYPAT_LITE=lite-samples
+  CRAYPAT_OPTS_EXECUTABLE=libexec64/opts
+  CRAYPAT_ROOT=/opt/cray/pe/perftools/23.12.0
+  CRAYPE_VERSION=2.7.30
+  CRAY_BINUTILS_VERSION=/opt/cray/pe/cce/17.0.0
+  CRAY_CC_VERSION=17.0.0
+  CRAY_DSMML_VERSION=0.2.2
+  CRAY_FTN_VERSION=17.0.0
+  CRAY_LIBSCI_VERSION=23.12.5
+  CRAY_MPICH_VERSION=8.1.28
+  CRAY_PERFTOOLS_VERSION=23.12.0
+  CRAY_PE_LIBSCI_VERSION=23.12.5
+  LMOD_FAMILY_COMPILER_VERSION=17.0.0
+  LMOD_FAMILY_CRAYPE_CPU_VERSION=false
+  LMOD_FAMILY_CRAYPE_NETWORK_VERSION=false
+  LMOD_FAMILY_CRAYPE_VERSION=2.7.30
+  LMOD_FAMILY_LIBSCI_VERSION=23.12.5
+  LMOD_FAMILY_MPI_VERSION=8.1.28
+  LMOD_FAMILY_PERFTOOLS_VERSION=false
+  LMOD_FAMILY_PRGENV_VERSION=8.5.0
+  LMOD_VERSION=8.7.31
+  MPICH_DIR=/opt/cray/pe/mpich/8.1.28/ofi/crayclang/17.0
+  PAT_RT_EXPERIMENT=samp_cs_time
+  PAT_RT_PERFCTR=default_samp
+  PAT_RT_PERFCTR_DISABLE_COMPONENTS=nvml,rocm_smi
+  PAT_RT_SAMPLING_MODE=3
+  PERFTOOLS_VERSION=23.12.0
+  PMI_CONTROL_PORT=24991
+  PMI_JOBID=4011011
+  PMI_LOCAL_RANK=0
+  PMI_LOCAL_SIZE=1
+  PMI_RANK=0
+  PMI_SHARED_SECRET=5382809275081472310
+  PMI_SIZE=1
+  PMI_UNIVERSE_SIZE=1
+
+Report time environment variables:
+    CRAYPAT_ROOT=/opt/cray/pe/perftools/23.12.0
+
+Number of MPI control variables collected:  0
+
+  (To see the list, specify: -s mpi_cvar=show)
+
+Report command line options:  <none>
+
+Operating system:
+  Linux 5.14.21-150500.55.31_13.0.53-cray_shasta_c #1 SMP Mon Dec 4 22:57:12 UTC 2023 (03d3f83)
+
+Hardware performance counter events:
+   CORE_TO_L2_CACHEABLE_REQUEST_ACCESS_STATUS:LS_RD_BLK_C  L2 cache request outcomes. This event does not count accesses to the L2 cache by the L2 prefetcher.:Number of data cache fill requests missing in the L2 (all types).
+   L2_PREFETCH_HIT_L2                                      Number of L2 prefetcher hits in the L2
+   L2_PREFETCH_HIT_L3                                      Number of L2 prefetcher hits in the L3
+   REQUESTS_TO_L2_GROUP1:L2_HW_PF                          TBD:Number of prefetches accepted by L2 pipeline, hit or miss.
+   REQUESTS_TO_L2_GROUP1:RD_BLK_X                          TBD:Number of data cache stores
