@@ -14,7 +14,7 @@ int main(void)
     int R = 1;                // interaction radius
     float dt = 0.2;           // time step
     int Nt = 200;             // number of time steps
-    int N = 500;              // number of birds
+    int N = 1000;              // number of birds
     bool plotRealTime = true; // plot real time or not
 
     // Simulation variables
