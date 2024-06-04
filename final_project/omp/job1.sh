@@ -12,4 +12,4 @@
 
 # Run the executable file 
 # and write the output into my_output_file
-srun -n 1 ./myexecutable.out ./profiling/results1.txt
+srun -n 1 perf stat ./myexecutable.out ./profiling/results1.txt
