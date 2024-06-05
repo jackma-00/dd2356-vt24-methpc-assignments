@@ -4,7 +4,7 @@ set output 'execution_time_plot.png'
 
 # Set the title and labels for axes
 set title "Execution Time Plot"
-set xlabel "Number of Threads"
+set xlabel "Number of Processes"
 set ylabel "Execution Time (seconds)"
 
 # Set the range for x and y axes
